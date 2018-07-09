@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -64,8 +65,8 @@ public class DataManager {
     public Observable<String> addBitmap(Bitmap bmp) {
         return Observable.create((ObservableEmitter<String> obs) ->{
             getFolder();
-            String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-            String mImageName="MI_"+ timeStamp +".jpg";
+            Calendar calendar = Calendar.getInstance();
+            String mImageName="MI_"+ calendar.getTimeInMillis() +".jpg";
             File file = new File(Environment.getExternalStorageDirectory() +
                     File.separator + "images" + File.separator + mImageName);
             FileOutputStream fOut  = new FileOutputStream(file);
