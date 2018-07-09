@@ -25,13 +25,13 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
 
     public ImagesAdapter(List<MyImage> images) { this.images = images; }
 
-    public Bitmap getImage(int pos){ return images.get(pos).getBitmap(); }
+    public MyImage getItem(int pos){ return images.get(pos); }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) { this.onItemClickListener = onItemClickListener; }
 
     synchronized
     public void add(int max){
-        images.add(new MyImage(null,max));
+        images.add(new MyImage(max));
         notifyItemInserted(images.size()-1);
     }
 
@@ -42,10 +42,11 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
     }
 
     synchronized
-    public void upd(int pos, Bitmap bitmap){
+    public void upd(int pos, Bitmap bitmap, String path){
         images.get(pos).setProgress(0);
         images.get(pos).setMaxProgress(0);
         images.get(pos).setBitmap(bitmap);
+        images.get(pos).setPath(path);
         notifyItemChanged(pos);
     }
 

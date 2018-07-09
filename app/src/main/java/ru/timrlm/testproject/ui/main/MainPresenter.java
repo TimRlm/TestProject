@@ -2,8 +2,6 @@ package ru.timrlm.testproject.ui.main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
-import android.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +14,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.timrlm.testproject.R;
 import ru.timrlm.testproject.data.DataManager;
-import ru.timrlm.testproject.di.ActivityContext;
 import ru.timrlm.testproject.di.ApplicationContext;
 import ru.timrlm.testproject.di.ConfigPersistent;
 import ru.timrlm.testproject.ui.base.BasePresenter;
@@ -39,7 +35,7 @@ class MainPresenter extends BasePresenter<MainMvpView> {
     }
 
     public void loadImages(){
-        getMvpView().setImages(new ArrayList<>());
+        mDataManager.getAllBitmaps().subscribe(list->getMvpView().setImages(list),Throwable::printStackTrace);
     }
 
     public void mirrorBitmap(Bitmap bmp){ doIt(bmp,0); }
@@ -63,12 +59,22 @@ class MainPresenter extends BasePresenter<MainMvpView> {
                     getMvpView().updImageProgress(pos,i.intValue()+1);
                 }else{
                     switch (type){
-                        case 0: getMvpView().setImage(pos,BitmapUtil.mirrorBitmap(bmp)); break;
-                        case 1: getMvpView().setImage(pos,BitmapUtil.monochrome(bmp)); break;
-                        case 2: getMvpView().setImage(pos,BitmapUtil.rotate(bmp,90)); break;
+                        case 0: save(pos,BitmapUtil.mirrorBitmap(bmp)); break;
+                        case 1: save(pos,BitmapUtil.monochrome(bmp)); break;
+                        case 2: save(pos,BitmapUtil.rotate(bmp,90)); break;
                     }
                 }
             },Throwable::printStackTrace));
+    }
+
+    synchronized
+    private void save(int pos, Bitmap bmp){
+        mDataManager.addBitmap(bmp).subscribe(path->getMvpView().setImage(pos, bmp,path), throwable -> getMvpView().showErrorView(throwable.getMessage()));
+    }
+
+
+    public void remove(String path, int pos) {
+        mDataManager.deleteBitmap(path).subscribe(b->getMvpView().rmvImage(pos),throwable -> getMvpView().showErrorView(throwable.getMessage()));
     }
 
     public void loadImg(String url){

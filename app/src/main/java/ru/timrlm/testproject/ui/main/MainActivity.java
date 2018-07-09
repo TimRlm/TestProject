@@ -1,6 +1,8 @@
 package ru.timrlm.testproject.ui.main;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -8,6 +10,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,15 +77,18 @@ public class MainActivity extends BaseActivity implements MainMvpView, ImagesAda
     public void updImageProgress(int pos, int progress) { mAdapter.upd(pos,progress); }
 
     @Override
-    public void setImage(int pos,Bitmap bitmap) { mAdapter.upd(pos,bitmap); }
+    public void setImage(int pos,Bitmap bitmap, String path) { mAdapter.upd(pos,bitmap, path); }
+
+    @Override
+    public void rmvImage(int pos) { mAdapter.rmv(pos); }
 
     @Override
     public void onItemClick(int position) {
         MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter((d,index,item)->{
             if (index == 0){
-                setImageBitmap(mAdapter.getImage(position));
+                setImageBitmap(mAdapter.getItem(position).getBitmap());
             }else{
-//                mPresenter.remove()
+                mPresenter.remove((mAdapter.getItem(position).getPath()),position);
             }
             d.dismiss();
         });
@@ -101,6 +108,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, ImagesAda
     @OnClick({R.id.main_rotate,R.id.main_invert,R.id.main_mirror})
     public void rotate(Button button) {
         if (mActualBitmap == null) return;
+        if (ContextCompat.checkSelfPermission(MainActivity.this,      Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
+            return;
+        }
         switch (button.getId()){
             case R.id.main_rotate:  mPresenter.rotate(mActualBitmap); break;
             case R.id.main_invert:  mPresenter.monochrome(mActualBitmap); break;

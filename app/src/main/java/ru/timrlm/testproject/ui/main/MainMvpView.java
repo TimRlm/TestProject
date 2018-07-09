@@ -13,5 +13,6 @@ interface MainMvpView extends MvpView {
     void setImages(List<MyImage> images);
     int addImage(int maxProgress);
     void updImageProgress(int pos, int progress);
-    void setImage(int pos,Bitmap bitmap);
+    void setImage(int pos,Bitmap bitmap, String path);
+    void rmvImage(int pos);
 }
