@@ -18,7 +18,8 @@
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/main_img"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/choose_img"
             android:layout_width="wrap_content"

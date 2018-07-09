@@ -8,4 +8,5 @@
     <string name="choose_gallery">Choose from Gallery</string>
     <string name="error">Error</string>
     <string name="no_image">Image not founded</string>
+    <string name="input_uri">Input URL</string>
 </resources>

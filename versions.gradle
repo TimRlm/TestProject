@@ -7,6 +7,6 @@ ext {
     RETROFIT_VERSION = '2.3.0'
     MATERIAL_DIALOG_VERSION = '0.9.6.0'
     TIMBER_VERSION = '4.1.2'
-    GLIDE_VERSION = '4.6.1'
+    GLIDE_VERSION = '4.7.1'
     daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
 }

@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.IOException;
 
@@ -45,6 +49,24 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @OnClick(R.id.main_mirror)
     public void mirror() {
+    }
+
+    @OnClick(R.id.main_img)
+    public void fromUri() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.input_uri)
+                .input("", "", (dialog, input) -> {
+                    Log.v("qwerty",input.toString());
+                    Glide.with(this)
+                            .asBitmap()
+                            .apply( new RequestOptions()
+                                    .placeholder(android.R.drawable.stat_sys_download)
+                                    .error(android.R.drawable.stat_notify_error)
+                            )
+                            .load(input.toString())
+                            .into(mImgView);
+                    }
+                ).show();
     }
 
     @OnClick(R.id.choose_img)
@@ -81,19 +103,19 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMAGE_RESULT && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImgView.setImageBitmap(imageBitmap);
-            findViewById(R.id.choose_img).setVisibility(View.GONE);
+            setImageBitmap((Bitmap) data.getExtras().get("data"));
         }
         if (requestCode == GALLARY_RESULT && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                mImgView.setImageBitmap(bitmap);
-                findViewById(R.id.choose_img).setVisibility(View.GONE);
+            try { setImageBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage));
             } catch (IOException e) { showError(getString(R.string.no_image)); }
         }
+    }
+
+    private void setImageBitmap(Bitmap bitmap){
+        mImgView.setImageBitmap(bitmap);
+        mImgView.setVisibility(View.VISIBLE);
+        findViewById(R.id.choose_img).setVisibility(View.GONE);
     }
 
     @Override
