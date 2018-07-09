@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TestProject</string>
+    <string name="choose_img">Choose image</string>
+    <string name="rotate">Rotate</string>
+    <string name="invert_colors">Invert colors</string>
+    <string name="mirror_img">Mirror image</string>
 </resources>
