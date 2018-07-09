@@ -13,18 +13,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import ru.timrlm.testproject.R;
 import ru.timrlm.testproject.data.model.MyImage;
 
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewHolder> {
     private List<MyImage> images;
     private Context mContext;
+    private OnItemClickListener onItemClickListener = (p)->{};
 
     public ImagesAdapter(List<MyImage> images) { this.images = images; }
+
+    public Bitmap getImage(int pos){ return images.get(pos).getBitmap(); }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) { this.onItemClickListener = onItemClickListener; }
 
     synchronized
     public void add(int max){
@@ -44,6 +47,11 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         images.get(pos).setMaxProgress(0);
         images.get(pos).setBitmap(bitmap);
         notifyItemChanged(pos);
+    }
+
+    public void rmv(int pos){
+        images.remove(pos);
+        notifyItemRemoved(pos);
     }
 
     @Override
@@ -79,6 +87,10 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         ImageViewHolder(View view){
             super(view);
             rootView = view;
+            view.setOnClickListener((v)->{
+                if (images.get(getAdapterPosition()).getMaxProgress() == images.get(getAdapterPosition()).getProgress() )
+                    onItemClickListener.onItemClick(getAdapterPosition());
+            });
         }
 
         public void setBackground(int color){ rootView.setBackgroundColor(mContext.getResources().getColor(color)); }
@@ -86,5 +98,9 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         public void setImage(Bitmap bitmap){ ((ImageView) rootView.findViewById(R.id.view_image_img)).setImageBitmap(bitmap); }
 
         public ProgressBar getProgressBar(){ return rootView.findViewById(R.id.view_image_progress); }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
     }
 }

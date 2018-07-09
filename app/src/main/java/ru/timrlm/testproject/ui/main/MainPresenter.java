@@ -79,7 +79,7 @@ class MainPresenter extends BasePresenter<MainMvpView> {
         },t->{
             getMvpView().hideProgressView();
             getMvpView().setImageBitmap(null);
-            getMvpView().showErrorView(mContext.getString(R.string.no_format));
+            getMvpView().showErrorView(t.getMessage());
         });
     }
 

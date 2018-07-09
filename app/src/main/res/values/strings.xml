@@ -10,4 +10,6 @@
     <string name="no_image">Image not found</string>
     <string name="input_uri">Input URL</string>
     <string name="no_format">Incorrect format ot not found</string>
+    <string name="delete">Delete</string>
+    <string name="choose">Choose</string>
 </resources>

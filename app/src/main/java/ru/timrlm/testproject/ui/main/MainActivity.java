@@ -6,12 +6,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -38,7 +40,7 @@ import ru.timrlm.testproject.data.model.MyImage;
 import ru.timrlm.testproject.ui.base.BaseActivity;
 import ru.timrlm.testproject.util.BitmapUtil;
 
-public class MainActivity extends BaseActivity implements MainMvpView {
+public class MainActivity extends BaseActivity implements MainMvpView, ImagesAdapter.OnItemClickListener {
     @Inject MainPresenter mPresenter;
     @BindView(R.id.main_img) AppCompatImageView mImgView;
     @BindView(R.id.main_rv) RecyclerView mRv;
@@ -56,6 +58,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     @Override
     public void setImages(List<MyImage> images) {
         mAdapter = new ImagesAdapter(images);
+        mAdapter.setOnItemClickListener(this);
         mRv.setAdapter(mAdapter);
     }
 
@@ -71,6 +74,29 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Override
     public void setImage(int pos,Bitmap bitmap) { mAdapter.upd(pos,bitmap); }
+
+    @Override
+    public void onItemClick(int position) {
+        MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter((d,index,item)->{
+            if (index == 0){
+                setImageBitmap(mAdapter.getImage(position));
+            }else{
+//                mPresenter.remove()
+            }
+            d.dismiss();
+        });
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.choose)
+                .icon(android.R.drawable.checkbox_on_background)
+                .build());
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.delete)
+                .icon(android.R.drawable.ic_delete)
+                .build());
+        new MaterialDialog.Builder(this)
+                .adapter(adapter,null)
+                .show();
+    }
 
     @OnClick({R.id.main_rotate,R.id.main_invert,R.id.main_mirror})
     public void rotate(Button button) {
