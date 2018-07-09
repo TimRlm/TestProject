@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
@@ -24,12 +26,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.timrlm.testproject.R;
+import ru.timrlm.testproject.data.model.MyImage;
 import ru.timrlm.testproject.ui.base.BaseActivity;
 import ru.timrlm.testproject.util.BitmapUtil;
 
@@ -40,28 +45,41 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     private final int IMAGE_RESULT = 1;
     private final int GALLARY_RESULT = 2;
     private Bitmap mActualBitmap;
+    private ImagesAdapter mAdapter;
+
+
+    public void init() {
+        mRv.setLayoutManager(new LinearLayoutManager(this));
+        mPresenter.loadImages();
+    }
 
     @Override
-    public void init() {
-
+    public void setImages(List<MyImage> images) {
+        mAdapter = new ImagesAdapter(images);
+        mRv.setAdapter(mAdapter);
     }
 
-    @OnClick(R.id.main_rotate)
-    public void rotate() {
-        mActualBitmap = BitmapUtil.rotate(mActualBitmap,90);
-        mImgView.setImageBitmap(mActualBitmap);
+    @Override
+    public int addImage(int maxProgress) {
+        mAdapter.add(maxProgress);
+        mRv.scrollToPosition(mAdapter.getItemCount() - 1);
+        return mAdapter.getItemCount() - 1;
     }
 
-    @OnClick(R.id.main_invert)
-    public void invert() {
-        mActualBitmap = BitmapUtil.monochrome(mActualBitmap);
-        mImgView.setImageBitmap(mActualBitmap);
-    }
+    @Override
+    public void updImageProgress(int pos, int progress) { mAdapter.upd(pos,progress); }
 
-    @OnClick(R.id.main_mirror)
-    public void mirror() {
-        mActualBitmap = BitmapUtil.mirrorBitmap(mActualBitmap);
-        mImgView.setImageBitmap(mActualBitmap);
+    @Override
+    public void setImage(int pos,Bitmap bitmap) { mAdapter.upd(pos,bitmap); }
+
+    @OnClick({R.id.main_rotate,R.id.main_invert,R.id.main_mirror})
+    public void rotate(Button button) {
+        if (mActualBitmap == null) return;
+        switch (button.getId()){
+            case R.id.main_rotate:  mPresenter.rotate(mActualBitmap); break;
+            case R.id.main_invert:  mPresenter.monochrome(mActualBitmap); break;
+            case R.id.main_mirror:  mPresenter.mirrorBitmap(mActualBitmap); break;
+        }
     }
 
     @OnClick(R.id.main_img)
@@ -116,18 +134,11 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     }
 
     @Override
-    public void setImageBitmap(Bitmap bitmap){
-        mActualBitmap = bitmap;
-        mImgView.setImageBitmap(bitmap);
-        mImgView.setVisibility(View.VISIBLE);
-        findViewById(R.id.choose_img).setVisibility(View.GONE);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityComponent().inject(this);
         mPresenter.attachView(this);
+        init();
     }
 
     @Override
@@ -147,4 +158,12 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Override
     public void showErrorView(String mes) { showError(mes); }
+
+    @Override
+    public void setImageBitmap(Bitmap bitmap){
+        mActualBitmap = bitmap;
+        mImgView.setImageBitmap(bitmap);
+        mImgView.setVisibility(View.VISIBLE);
+        findViewById(R.id.choose_img).setVisibility(View.GONE);
+    }
 }

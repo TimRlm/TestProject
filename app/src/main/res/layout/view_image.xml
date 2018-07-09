@@ -9,6 +9,12 @@
         android:id="@+id/view_image_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:background="@color/lightgray"/>
+        android:layout_gravity="center"/>
+    <ProgressBar
+        android:id="@+id/view_image_progress"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:scaleY="30"
+        android:layout_gravity="center"/>
 </FrameLayout>

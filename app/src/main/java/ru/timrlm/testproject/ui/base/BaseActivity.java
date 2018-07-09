@@ -33,7 +33,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(setlayout());
         ButterKnife.bind(this);
-        init();
 
         // Create the ActivityComponent and reuses cached ConfigPersistentComponent if this is
         // being called after a configuration change.
@@ -50,7 +49,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public ActivityComponent activityComponent() { return mActivityComponent; }
     public abstract int setlayout();
-    public abstract void init();
 
     protected void showError(String mes){
         new MaterialDialog.Builder(this)

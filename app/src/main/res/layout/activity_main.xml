@@ -1,73 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
+<android.support.v7.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.main.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity"
-    android:layout_column="2"
-    android:padding="16dp">
-    <FrameLayout
-        android:layout_width="160dp"
-        android:layout_height="140dp"
-        android:layout_rowWeight="1"
-        android:layout_rowSpan="3"
-        android:background="@color/lightgray"
-        android:layout_marginRight="16dp">
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/main_img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
+    android:orientation="vertical">
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_row="4"
+        android:padding="16dp">
+        <FrameLayout
+            android:layout_width="160dp"
+            android:layout_height="140dp"
+            android:layout_rowWeight="1"
+            android:layout_rowSpan="3"
+            android:background="@color/lightgray"
+            android:layout_marginRight="16dp">
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/main_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/choose_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="10dp"
+                android:maxWidth="150dp"
+                android:layout_gravity="center"
+                android:elevation="2dp"
+                android:text="@string/choose_img"/>
+        </FrameLayout>
+
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/choose_img"
+            android:id="@+id/main_rotate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
             android:minWidth="10dp"
             android:maxWidth="150dp"
-            android:layout_gravity="center"
-            android:elevation="2dp"
-            android:text="@string/choose_img"/>
-    </FrameLayout>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/main_rotate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_columnWeight="1"
-        android:minWidth="10dp"
-        android:maxWidth="150dp"
-        android:text="@string/rotate"/>
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/main_invert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_columnWeight="1"
-        android:minWidth="10dp"
-        android:maxWidth="150dp"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:text="@string/invert_colors"/>
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/main_mirror"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_columnWeight="1"
-        android:minWidth="10dp"
-        android:maxWidth="150dp"
-        android:layout_row="2"
-        android:layout_column="1"
-        android:text="@string/mirror_img"/>
-
+            android:text="@string/rotate"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/main_invert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:minWidth="10dp"
+            android:maxWidth="150dp"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:text="@string/invert_colors"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/main_mirror"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:minWidth="10dp"
+            android:maxWidth="150dp"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:text="@string/mirror_img"/>
+    </GridLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_rv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_row="3"
-        android:layout_column="0"
-        android:layout_columnSpan="2"
-        android:layout_columnWeight="1"
-        android:layout_rowWeight="1"
-        android:layout_marginTop="16dp"/>
-</GridLayout>
+        android:layout_weight="1"/>
+</android.support.v7.widget.LinearLayoutCompat>

@@ -31,7 +31,7 @@ public class DataManager {
         mRxEventBus = rxEventBus;
     }
 
-    public static Observable<Bitmap> getBitmapFromURL(String src) {
+    public Observable<Bitmap> getBitmapFromURL(String src) {
         return Observable.create((ObservableEmitter<Bitmap> obs) ->{
             URL url = new URL(src);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
