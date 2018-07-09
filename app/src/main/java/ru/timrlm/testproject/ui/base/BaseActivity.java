@@ -52,6 +52,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract int setlayout();
     public abstract void init();
 
+    protected void showError(String mes){
+        new MaterialDialog.Builder(this)
+                .title(R.string.error)
+                .content(mes)
+                .positiveText("OK")
+                .show();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

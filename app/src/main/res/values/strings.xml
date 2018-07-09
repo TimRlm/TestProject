@@ -4,4 +4,8 @@
     <string name="rotate">Rotate</string>
     <string name="invert_colors">Invert colors</string>
     <string name="mirror_img">Mirror image</string>
+    <string name="choose_camera">Choose from Camera</string>
+    <string name="choose_gallery">Choose from Gallery</string>
+    <string name="error">Error</string>
+    <string name="no_image">Image not founded</string>
 </resources>

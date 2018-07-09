@@ -9,18 +9,18 @@
     android:layout_column="2"
     android:padding="16dp">
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_columnWeight="1"
+        android:layout_width="160dp"
+        android:layout_height="140dp"
         android:layout_rowWeight="1"
         android:layout_rowSpan="3"
+        android:background="@color/lightgray"
         android:layout_marginRight="16dp">
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/main_img"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lightgray"/>
+            android:layout_height="match_parent"/>
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/choose_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="10dp"
