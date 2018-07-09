@@ -7,4 +7,7 @@ package ru.timrlm.testproject.ui.base;
  * that then usually will be implemented by an Activity or Fragment.
  */
 public interface MvpView {
+    void showProgressView();
+    void hideProgressView();
+    void showErrorView(String mes);
 }

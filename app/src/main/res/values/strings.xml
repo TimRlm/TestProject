@@ -7,6 +7,7 @@
     <string name="choose_camera">Choose from Camera</string>
     <string name="choose_gallery">Choose from Gallery</string>
     <string name="error">Error</string>
-    <string name="no_image">Image not founded</string>
+    <string name="no_image">Image not found</string>
     <string name="input_uri">Input URL</string>
+    <string name="no_format">Incorrect format ot not found</string>
 </resources>

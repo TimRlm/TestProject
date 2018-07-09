@@ -60,6 +60,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .show();
     }
 
+    private MaterialDialog progress;
+    protected void showProgress(){
+        progress = new MaterialDialog.Builder(this)
+                .progress(true,0)
+                .cancelable(false)
+                .show();
+    }
+
+    protected void hideProgress(){progress.dismiss();}
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -16,7 +17,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.io.IOException;
 
@@ -26,6 +31,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.timrlm.testproject.R;
 import ru.timrlm.testproject.ui.base.BaseActivity;
+import ru.timrlm.testproject.util.BitmapUtil;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
     @Inject MainPresenter mPresenter;
@@ -33,6 +39,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     @BindView(R.id.main_rv) RecyclerView mRv;
     private final int IMAGE_RESULT = 1;
     private final int GALLARY_RESULT = 2;
+    private Bitmap mActualBitmap;
 
     @Override
     public void init() {
@@ -41,32 +48,28 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @OnClick(R.id.main_rotate)
     public void rotate() {
+        mActualBitmap = BitmapUtil.rotate(mActualBitmap,90);
+        mImgView.setImageBitmap(mActualBitmap);
     }
 
     @OnClick(R.id.main_invert)
     public void invert() {
+        mActualBitmap = BitmapUtil.monochrome(mActualBitmap);
+        mImgView.setImageBitmap(mActualBitmap);
     }
 
     @OnClick(R.id.main_mirror)
     public void mirror() {
+        mActualBitmap = BitmapUtil.mirrorBitmap(mActualBitmap);
+        mImgView.setImageBitmap(mActualBitmap);
     }
 
     @OnClick(R.id.main_img)
     public void fromUri() {
         new MaterialDialog.Builder(this)
                 .title(R.string.input_uri)
-                .input("", "", (dialog, input) -> {
-                    Log.v("qwerty",input.toString());
-                    Glide.with(this)
-                            .asBitmap()
-                            .apply( new RequestOptions()
-                                    .placeholder(android.R.drawable.stat_sys_download)
-                                    .error(android.R.drawable.stat_notify_error)
-                            )
-                            .load(input.toString())
-                            .into(mImgView);
-                    }
-                ).show();
+                .input("", "", (dialog, input) -> mPresenter.loadImg(input.toString()))
+                .show();
     }
 
     @OnClick(R.id.choose_img)
@@ -112,7 +115,9 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         }
     }
 
-    private void setImageBitmap(Bitmap bitmap){
+    @Override
+    public void setImageBitmap(Bitmap bitmap){
+        mActualBitmap = bitmap;
         mImgView.setImageBitmap(bitmap);
         mImgView.setVisibility(View.VISIBLE);
         findViewById(R.id.choose_img).setVisibility(View.GONE);
@@ -133,4 +138,13 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Override
     public int setlayout() { return R.layout.activity_main; }
+
+    @Override
+    public void showProgressView() { showProgress(); }
+
+    @Override
+    public void hideProgressView() { hideProgress(); }
+
+    @Override
+    public void showErrorView(String mes) { showError(mes); }
 }
